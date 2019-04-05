@@ -1,0 +1,40 @@
+{
+  "name": "ttb-node-zwave",
+  "version": "2.0.0",
+  "description": "A set of Node-RED nodes for ZWave support on the Thingbox (http://TheThingbox.io) and TimeSquAir (http://TimeSquAir.io)",
+  "node-red": {
+    "nodes": {
+      "zwave": "nodes/zwave.js",
+      "zwave-generic": "nodes/zwave-generic.js",
+      "zwave-inclusion-node": "nodes/zwave-inclusion-node.js",
+      "zwave-binary-switch": "nodes/zwave-binary-switch.js",
+      "zwave-light-dimmer-switch": "nodes/zwave-light-dimmer-switch.js",
+      "nodonSoftRemote": "nodes/nodonSoftRemote.js"
+    }
+  },
+  "installation-duration": 420,
+  "dependencies": {
+    "ttb-lib-zwave": "TheThingBox/ttb-lib-zwave#370a2698"
+  },
+  "keywords": [
+    "thingbox",
+    "thethingbox",
+    "timesquair",
+    "Z-Wave",
+    "ZWave"
+  ],
+  "main": "none",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thethingbox/ttb-node-zwave.git"
+  },
+  "author": "thethingbox <thethingbox@gmail.com> (http://thethingbox.io/)",
+  "license": "http://www.wtfpl.net",
+  "bugs": {
+    "url": "https://github.com/TheThingBox/ttb-node-zwave/issues"
+  },
+  "homepage": "https://github.com/TheThingBox/ttb-node-zwave#readme"
+}

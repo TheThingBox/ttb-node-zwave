@@ -1,0 +1,152 @@
+<!--
+	Copyright (c) 2015 Digital Airways (www.DigitalAirways.com)
+	This work is free. You can redistribute it and/or modify it under the
+	terms of the "Do What The Fuck You Want To" Public License, Version 2,
+	as published by Sam Hocevar. 
+	See http://www.wtfpl.net for more details.
+-->
+
+<script type="text/x-red" data-help-name="zwave">
+    <p>Ce node lance un scan Z-Wave et envoie les informations quand un évènement
+    se produit sur un appareil Z-Wave. Les données sont envoyées sur un topic
+    MQTT</p>
+    
+    <p>Le topic MQTT a la forme suivante :<br>
+    <code>[node_topic]/[nodeid]/[zwave_class]/[index]/</code>.</p>
+    
+    <p>- <code>nodeid</code> : c'est l'ID du capteur/actuateur, il est utilisé
+    pour l'identifier sur le réseau Z-Wave.</p>
+    
+	<p>- <code>zwave_class</code> : c'est le numéro de la classe Z-Wave
+    correspondant à l'information voulue. (Plus d'information 
+    <a target="_blank" href="http://wiki.micasaverde.com/index.php/ZWave_Command_Classes">
+        ici
+    </a>).</p>
+    
+    <p>- <code>index</code> : c'est l'index de la classe Z-Wave car dans la
+    majorité des cas il y a plusieurs informations pour chaque classe.</p>
+    
+    <p><b>Crédits</b> : Afin de pouvoir être fonctionnel ce node utilise la
+    librairie <code>openzwave</code>.</p>
+</script>
+
+<script type="text/x-red" data-help-name="zwave-in">
+    <p>Ce node retourne les informations de votre réseau Z-wave.</p>
+    
+    <p>Il requiert le <code>nodeid</code> du capteur dont vous voulez récupérer
+    les informations.</p>
+    
+    <p>Une instance de ce node est créée pour chaque informations quand votre
+    réseau Z-wave est scanné par le node Z-Wave dans le tab Z-wave.</p>
+    
+    <p>Le <code>nodeid</code> est l'ID du capteur sur votre réseau Zwave et
+    c'est un nombre</p>
+    
+    <p>La valeur en sortie est dans <code>msg.payload</code>. C'est toujours une
+    variable de type <code>string</code>.</p>
+    
+    <p>La sortie est un objet ayant la forme :<p>
+<pre>
+{ 
+    "topic": "zwave/4/49/4/", 
+    "payload": "6", 
+    "qos": 1, 
+    "retain": false, 
+    "_topic": "zwave/4/49/4/", 
+    "_msgid": "76f80c60.8907f4" 
+}
+</pre>
+    
+    <h3>Avancé</h3>
+    
+    <p>Vous pouvez directement choisir le <code>Broker</code> MQTT et le sujet
+    sur lequel vous voulez relever les informations.</p>
+    
+    <p>Pour cela, cliqué sur l'onglet <b>Avancé</b>. Cette manipulation implique
+    de connaitre son réseau Z-Wave un minimum car le sujet doit avoir la forme
+    suivante :
+    <code>[node_topic]/[nodeid]/[zwave_class]/[index]/</code>.</p>
+    
+    <p>- <code>nodeid</code> : c'est l'ID du capteur/actuateur sur le réseau
+    Z-Wave, il est utilisé pour l'identifier sur le réseau Z-Wave.</p>
+    
+	<p>- <code>zwave_class</code> : c'est le numéro de la classe Z-Wave
+    correspondant à l'information voulue. (Plus d'information 
+    <a target="_blank" href="http://wiki.micasaverde.com/index.php/ZWave_Command_Classes">
+        ici
+    </a>).</p>
+    
+    <p>- <code>index</code> : c'est l'index de la classe Z-Wave car dans la
+    majorité des cas il y a plusieurs informations pour chaque classe.</p>
+    
+    <p><b>Crédits</b> : Afin de pouvoir être fonctionnel ce node utilise la
+    librairie <code>openzwave</code>.</p>
+</script>
+
+<script type="text/x-red" data-help-name="zwave-out">
+    <p>Ce node permet de modifier la valeur d'un actuateur à partir des méthodes
+    présentent dans <code>openzwave</code>.</p>
+    
+    <h3>Avancé</h3>
+    
+    <p>Il peut être configuré via le <code>msg</code> avec :<br>
+    - <code>msg.method</code> pour définir la méthode utilisé,<br>
+    - <code>msg.level</code> pour définir la valeur du champs "Level",<br>
+    - <code>msg.class</code> pour définir la valeur du champs "Class",<br>
+    - <code>msg.index</code> pour définir la valeur du champs "Index",<br>
+    - <code>msg.value</code> pour définir la valeur du champs "Value",<br>
+    - <code>msg.nodeid</code> pour définir la valeur du champs "Nodeid".</p>
+    
+    <p><b>Crédits</b> : Afin de pouvoir être fonctionnel ce node utilise la
+    librairie <code>openzwave</code>.</p>
+</script>
+<script type="text/x-red" data-help-name="zwave-light-dimmer-switch">
+    <p>Ce node permet à l'utilisateur de définir plusieurs valeur pour un
+    variateur de lumière.</p>
+    <p>Les variateur de lumière compatible sont :
+    <ul>
+        <li>le LED Bulb d'Aeotec</li>
+        <li>le RGBW LED Bulb de Zipato</li>
+    </ul>
+    </p>
+    <p>Ce node supporte les intents :
+    <ul>
+        <li>Close : pour éteindre la lumière</li>
+        <li>Open : pour allumer la lumière</li>
+        <li>Intensity : pour définir la luminosité de l'ampoule</li>
+        <li>Color : pour définir la couleur d'une ampoule LED</li>
+    </ul>
+    </p>
+</script>
+<script type="text/x-red" data-help-name="zwave-binary-switch">
+    <p>Ce node permet à l'utilisateur de mettre à ON/OFF un interrupteur
+    binaire.<p>
+    <p>Le seul interrupteur binaire compatible est :
+    <ul>
+        <li>le FGWPE Wall Plug de FIBARO System</li>
+    </ul>
+    </p>
+    <p>Ce node supporte les intents :
+    <ul>
+        <li>Close : pour éteindre l'interrupteur</li>
+        <li>Open : pour allumer l'interrupteur</li>
+    </ul>
+    </p>
+</script>
+<script type="text/x-red" data-help-name="zwave-remote-control-multi-purpose">
+    <p>Ce node permet à l'utilisateur de recevoir des commandes d'une
+    télécommande à usage multiple.<p>
+    <p>La seule télécommande à usage multiple compatible est :
+    <ul>
+        <li>le SoftRemote de NodOn</li>
+    </ul>
+    </p>
+    <p>Ce node supporte les intents :
+    <ul>
+        <li>Close : quand le bouton avec le cercle plein est cliqué</li>
+        <li>Open : quand le bouton avec le cercle vide est cliqué</li>
+        <li>Less : quand le bouton moins est cliqué</li>
+        <li>More : quand le bouton plus est cliqué</li>
+    </ul>
+    </p>
+</script>

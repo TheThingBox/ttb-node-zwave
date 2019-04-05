@@ -1,0 +1,34 @@
+<script type="text/x-red" data-template-name="zwave">
+  <div class="form-row">
+    <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="zwave.broker"></span></label>
+    <input type="text" id="node-input-broker">
+  </div>
+  <div class="form-row">
+    <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="zwave.topic.label"></span></label>
+    <input type="text" id="node-input-topic" data-i18n="[placeholder]zwave.topic.placeholder">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="zwave.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]zwave.name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('zwave',{
+    category: 'Things',
+    color:"#ffffff",
+    defaults: {
+      name: {value: ""},
+      topic: {value: "zwave"},
+      broker: {type: "mqtt-broker", required: true, value: "MQTT.Localhost"}
+    },
+    inputs: 0,
+    outputs: 0,
+    icon: "zwave.png",
+    paletteLabel: "ZWave",
+    align: "right",
+    label: function() {
+      return this.name||"ZWave";
+    }
+  });
+</script>

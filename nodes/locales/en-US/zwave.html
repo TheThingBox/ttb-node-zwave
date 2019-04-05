@@ -1,0 +1,147 @@
+<!--
+	Copyright (c) 2015 Digital Airways (www.DigitalAirways.com)
+	This work is free. You can redistribute it and/or modify it under the
+	terms of the "Do What The Fuck You Want To" Public License, Version 2,
+	as published by Sam Hocevar. 
+	See http://www.wtfpl.net for more details.
+-->
+
+<script type="text/x-red" data-help-name="zwave">
+	<p>This node launches a Z-Wave scan and sends informations when an event
+    occurs on a Z-Wave device. The datas are sent on a MQTT topic.</p>
+    
+    <p>The MQTT topic is created like that:<br>
+    <code>[node_topic]/[nodeid]/[zwave_class]/[index]/</code>.</p>
+    
+	<p>- <code>nodeid</code>: is the nodeid of the sensor/actuator, used to
+    identify it in the Z-Wave network.</p>
+    
+	<p>- <code>zwave_class</code>: the Z-Wave class number of the informations
+    wanted. (For more informations go 
+    <a target="_blank" href="http://wiki.micasaverde.com/index.php/ZWave_Command_Classes">
+        here
+    </a>).</p>
+    
+    <p>- <code>index</code>: the Z-Wave class index because in most cases there
+    are many informations in one class.</p>
+    
+    <p><b>Credits</b>: In order to work this node uses the <code>openzwave</code>
+    library.</p>
+</script>
+
+<script type="text/x-red" data-help-name="zwave-in">
+	<p>This node return the informations from your Z-wave network.</p>
+    
+    <p>It requires the <code>nodeid</code> of the sensor you want to display
+    information.</p>
+    
+    <p>An instance is created for every informations when your Z-wave network
+    is scanned in the Z-wave tab.</p>
+    
+    <p>The <code>nodeid</code> is the ID of the sensor on your Zwave network
+    and it is a number.</p>
+    
+	<p>The output value is in <code>msg.payload</code>. It is always a
+    <code>string</code> var type.</p>
+    
+    <p>The output is an object like that:<p>
+<pre>
+{ 
+    "topic": "zwave/4/49/4/", 
+    "payload": "6", 
+    "qos": 1, 
+    "retain": false, 
+    "_topic": "zwave/4/49/4/", 
+    "_msgid": "76f80c60.8907f4" 
+}
+</pre>
+    
+    <h3>Advanced</h3>
+    
+    <p>You can choose directly the MQTT <code>Broker</code> and the topic you
+    want to listen informations.</p>
+    
+    <p>For that, click on the <b>Advanced</b> tab. This manipulation involves
+    to know its Z-Wave network because the topic must haves this form:
+    <code>[node_topic]/[nodeid]/[zwave_class]/[index]/</code>.</p>
+    
+	<p>- <code>nodeid</code>: is the nodeid of the sensor/actuator, used to
+    identify it in the Z-Wave network.</p>
+    
+	<p>- <code>zwave_class</code>: the Z-Wave class number of the informations
+    wanted. (For more informations go 
+    <a target="_blank" href="http://wiki.micasaverde.com/index.php/ZWave_Command_Classes">
+        here
+    </a>).</p>
+    
+    <p>- <code>index</code>: the Z-Wave class index because in most cases there
+    are many informations in one class.</p>
+    
+    <p><b>Credits</b>: In order to work this node uses the <code>openzwave</code>
+    library.</p>
+</script>
+
+<script type="text/x-red" data-help-name="zwave-out">
+    <p>This node allows the user to modify an actuator value from actual methods
+    in the <code>openzwave</code> library.</p>
+    
+    <h3>Advanced</h3>
+    
+    <p>It can be configured via the <code>msg</code> with :<br>
+    - <code>msg.method</code> to set the method to use,<br>
+    - <code>msg.level</code> to set value of "Level" field,<br>
+    - <code>msg.class</code> to set value of "Class" field,<br>
+    - <code>msg.index</code> to set value of "Index" field,<br>
+    - <code>msg.value</code> to set value of "Value" field,<br>
+    - <code>msg.nodeid</code> to set value of "Nodeid" field.</p>
+    
+    <p><b>Credits</b>: In order to work this node uses the <code>openzwave</code>
+    library.</p>
+</script>
+<script type="text/x-red" data-help-name="zwave-light-dimmer-switch">
+    <p>This node allows the user to set some values for a light dimmer switch.</p>
+    <p>The lights dimmer switch compatible are:
+    <ul>
+        <li>the Aeotec, LED Bulb</li>
+        <li>the Zipato, RGBW LED Bulb</li>
+    </ul>
+    </p>
+    <p>This node support the intents:
+    <ul>
+        <li>Close : to turn OFF the light</li>
+        <li>Open : to turn ON the light</li>
+        <li>Intensity : to set the brightness intensity</li>
+        <li>Color : to set the color of the LED bulb</li>
+    </ul>
+    </p>
+</script>
+<script type="text/x-red" data-help-name="zwave-binary-switch">
+    <p>This node allows the user to set ON/OFF a binary switch.</p>
+    <p>The only binary switch compatible is:
+    <ul>
+        <li>the FIBARO System, FGWPE Wall Plug</li>
+    </ul>
+    </p>
+    <p>This node support the intents:
+    <ul>
+        <li>Close : to turn OFF the switch</li>
+        <li>Open : to turn ON the switch</li>
+    </ul>
+    </p>
+</script>
+<script type="text/x-red" data-help-name="zwave-remote-control-multi-purpose">
+    <p>This node allows the user to receive commands from a Multi-Purpose Remote.</p>
+    <p>The only Multi-Purpose Remote compatible is:
+    <ul>
+        <li>the NodOn, SoftRemote</li>
+    </ul>
+    </p>
+    <p>This node send the intents:
+    <ul>
+        <li>Close : when the full circle button is clicked</li>
+        <li>Open : when the empty circle button is clicked</li>
+        <li>Less : when the minus button is clicked</li>
+        <li>More : when the plus button is clicked</li>
+    </ul>
+    </p>
+</script>

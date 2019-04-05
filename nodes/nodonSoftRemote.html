@@ -1,0 +1,69 @@
+<script type="text/x-red" data-template-name="nodonSoftRemote">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="ttb-zwave2/zwave:zwave.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="">
+  </div>
+  <div class="form-row">
+    <label for="node-input-push"><i class="fa fa-bullseye"></i> <span data-i18n="ttb-zwave2/zwave:zwave.push"></span></label>
+    <input type="checkbox" id="node-input-push">
+  </div>
+  <div style="cursor: pointer;" class="accordion-header ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all" id="nset-advanced">
+    <span style="display: inline-block;">
+      <span class="ui-icon ui-icon-triangle-1-e" id="nset-advanced-arrow"></span>
+    </span>
+    <span data-i18n="ttb-zwave2/zwave:zwave-in.advanced.title"></span>
+  </div>
+  <div style="padding-top: 7px; padding-bottom: 7px; border-left: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3; border-right: 1px solid #d3d3d3; border-radius: 2px; display: none;" id="nset-advanced-form">
+    <div class="form-row" style="padding-top: 7px;">
+      <span style="margin-left: 10px;"></span>
+      <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="ttb-zwave2/zwave:zwave-in.advanced.broker"></span></label>
+      <input type="text" id="node-input-broker">
+    </div>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('nodonSoftRemote',{
+    category: "system",
+    color: "#ffffff",
+    defaults: {
+      name: {value: ""},
+      nodeid: {value: ""},
+      push: {value: true},
+      mark: {value: null},
+      broker: {type: "mqtt-broker", required: true, value: "MQTT.Localhost"}
+    },
+    inputs:0,
+    outputs: 1,
+    icon: function () {
+      return this.mark || "zwave.png";
+    },
+    paletteLabel: 'ZWave device',
+    label: function () {
+      return "[" + this.nodeid + "] " + (this.name || "Nodon SoftRemote"); // this.productname + " - " + this.classindexname is undefined
+    },
+    oneditprepare: function () {
+      if(this.push === true) {
+        $("#node-input-push").prop("checked", true);
+      } else {
+        $("#node-input-push").prop("checked", false);
+      }
+      $("#nset-advanced").click(function () {
+        var form = $("#nset-advanced-form");
+        var arrow = $("#nset-advanced-arrow");
+        if (form.css("display") == "none") {
+          form.css("display", "block");
+          arrow.removeClass("ui-icon-triangle-1-e");
+          arrow.addClass("ui-icon-triangle-1-s");
+        } else {
+          form.css("display", "none");
+          arrow.removeClass("ui-icon-triangle-1-s");
+          arrow.addClass("ui-icon-triangle-1-e");
+        }
+      });
+    },
+    oneditsave: function () {
+      this.push = $("#node-input-push").prop("checked");
+    }
+  });
+</script>

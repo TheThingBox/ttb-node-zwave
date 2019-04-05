@@ -1,0 +1,201 @@
+<script type="text/x-red" data-template-name="zwave-generic">
+  <div class="form-row list">
+    <label for="node-input-productlist"><i class="fa fa-tasks"></i> <span data-i18n="ttb-zwave2/zwave:zwave-generic.device"></span></label>
+    <select type="text" id="node-input-productlist" style="width:72%;"></select>
+  </div>
+
+  <div class="form-row list">
+    <label for="node-input-indexlist"><i class="fa fa-tasks"></i> <span data-i18n="ttb-zwave2/zwave:zwave-generic.indexclass"></span></label>
+    <select type="text" id="node-input-indexlist" style="width:72%;"></select>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="ttb-zwave2/zwave:zwave-generic.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="">
+  </div>
+
+  <div style="cursor: pointer; margin-bottom: 12px;" class="list accordion-header ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-corner-all" id="nset-advanced">
+    <span style="display: inline-block;">
+      <span class="ui-icon ui-icon-triangle-1-e" id="nset-advanced-arrow"></span>
+    </span>
+    <span data-i18n="ttb-zwave2/zwave:zwave-in.advanced.title"></span>
+  </div>
+  <div style="padding-top: 7px; padding-bottom: 7px; border-left: 1px solid #d3d3d3; border-bottom: 1px solid #d3d3d3; border-right: 1px solid #d3d3d3; border-radius: 2px; display: none;" id="nset-advanced-form">
+    <div class="form-row" style="padding-top: 7px;">
+      <span style="margin-left: 10px;"></span>
+      <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="ttb-zwave2/zwave:zwave-in.advanced.broker"></span></label>
+      <input type="text" id="node-input-broker">
+    </div>
+  </div>
+
+  <div class="form-tips notready">
+    <label for="node-input-alert"><i class="fa fa-exclamation"></i> <span data-i18n="ttb-zwave2/zwave:zwave-generic.notready"></span>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("zwave-generic", {
+    category: "system",
+    color: "#ffffff",
+    defaults: {
+      name: {value: ""},
+      nodeid: {value: ""},
+      commandclass: {value: ""},
+      classindex: {value: ""},
+      productname: {value: ""},
+      classindexname: {value: ""},
+      mark: {value: null},
+      broker: {type: "mqtt-broker", required: true, value: "MQTT.Localhost"}
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: function () {
+      return this.mark || "zwave.png";
+    },
+    label: function () {
+      return "[" + this.nodeid + "] " + (this.name || this.productname) + " - " + this.classindexname;
+    },
+    oneditprepare: function () {
+      var that = this;
+      var exist = false;
+      $('.notready').hide();
+      $.getJSON("zwave/nodesArray", function (data) {
+        var productlist = $('#node-input-productlist'),
+            indexlist = $('#node-input-indexlist');
+        var productListOpt = productlist.prop('options'),
+            indexListOpt = indexlist.prop('options');
+        if (checkIfOneIsReady(data)) {
+          productListOpt.length = 0;
+          indexListOpt.length = 0;
+          productlist.prop('disabled', 'disabled'); // remove this line to allow changing the zwave node
+          for (var i = 2; i < data.length; i++) {
+            if (data[i] !== null && data[i].manufacturer !== "" && data[i].product !== "") {
+              productListOpt[productListOpt.length] = new Option(i + ": " + data[i].manufacturer + " - " + data[i].product, i);
+              if (that.productname === data[i].manufacturer + " - " + data[i].product)
+                exist = true;
+            }
+          }
+          var productSelected = productlist.val();
+          for (var j in data[productSelected].classes) {
+            if (data[productSelected].classes.hasOwnProperty(j) && commandclassToHide(j)) {
+              for (var k in data[productSelected].classes[j]) {
+                if (data[productSelected].classes[j].hasOwnProperty(k)) {
+                  indexListOpt[indexListOpt.length] = new Option(
+                      data[productSelected].classes[j][k].label,
+                      data[productSelected].classes[j][k].index
+                  );
+                  indexListOpt[indexListOpt.length - 1].setAttribute("commandclass", j);
+                }
+              }
+            }
+          }
+          productlist.change(function () {
+            indexListOpt.length = 0;
+            productSelected = productlist.val();
+            for (var j in data[productSelected].classes) {
+              if (data[productSelected].classes.hasOwnProperty(j) && commandclassToHide(j)) {
+                for (var k in data[productSelected].classes[j]) {
+                  if (data[productSelected].classes[j].hasOwnProperty(k)) {
+                    indexListOpt[indexListOpt.length] = new Option(
+                        data[productSelected].classes[j][k].label,
+                        data[productSelected].classes[j][k].index
+                    );
+                    indexListOpt[indexListOpt.length - 1].setAttribute("commandclass", j);
+                  }
+                }
+              }
+            }
+          });
+          if (that.productname !== '' && that.classindexname !== '') {
+            if (exist) {
+              productlist.val(that.nodeid).trigger("change");
+              indexlist.find("option").each(function () {
+                if ($(this).attr("commandclass") === that.commandclass
+                    && $(this).val() === that.classindex)
+                  $(this).attr("selected", "selected");
+              });
+            } else {
+              indexListOpt.length = 0;
+              productListOpt[productListOpt.length] = new Option(that.productname, that.nodeid, true, true);
+              indexListOpt[indexListOpt.length] = new Option(that.classindexname, that.classindex, true, true);
+              indexListOpt[indexListOpt.length - 1].setAttribute("commandclass", that.commandclass);
+            }
+          }
+        } else {
+          if (that.productname === '' && that.classindexname === '') {
+            $('.list').hide();
+            $('.notready').show();
+          } else {
+            $('.notready').show();
+            productlist.prop('disabled', 'disabled');
+            indexlist.prop('disabled', 'disabled');
+            if (that.productname !== '')
+              productListOpt[productListOpt.length] = new Option(that.productname, that.nodeid);
+            if (that.classindexname !== '') {
+              indexListOpt[indexListOpt.length] = new Option(that.classindexname, that.classindex);
+              indexListOpt[indexListOpt.length - 1].setAttribute("commandclass", that.commandclass);
+            }
+          }
+        }
+      });
+      $("#nset-advanced").click(function () {
+        var div = $("#nset-advanced");
+        var form = $("#nset-advanced-form");
+        var arrow = $("#nset-advanced-arrow");
+        if (form.css("display") == "none") {
+          form.css("display", "block");
+          div.css("margin-bottom", "0px");
+          form.css("margin-bottom", "12px");
+          arrow.removeClass("ui-icon-triangle-1-e");
+          arrow.addClass("ui-icon-triangle-1-s");
+        } else {
+          form.css("display", "none");
+          div.css("margin-bottom", "12px");
+          form.css("margin-bottom", "0px");
+          arrow.removeClass("ui-icon-triangle-1-s");
+          arrow.addClass("ui-icon-triangle-1-e");
+        }
+      });
+    },
+    oneditsave: function () {
+      var productlist = $('#node-input-productlist'),
+          indexlist = $('#node-input-indexlist');
+
+      this.nodeid = productlist.val();
+      this.commandclass = $('option:selected', indexlist).attr('commandclass');
+      this.classindex = indexlist.val();
+      // this.productname = productlist.find('option:selected').text();  // add/remove this line to allow changing the zwave node
+      this.classindexname = indexlist.find('option:selected').text();
+    }
+  });
+
+  function checkIfOneIsReady(data) {
+    var test = false;
+    for (var i = 2; i < data.length; i++) {
+      if (data[i] !== null && data[i].ready === true) {
+        test = true;
+        break;
+      }
+    }
+    return test;
+  }
+
+  function commandclassToHide(classnumber) {
+    classnumber = parseInt(classnumber);
+    var test = false;
+
+    switch (classnumber) {
+      case 94:
+      case 112:
+      case 115:
+      case 134:
+        test = false;
+        break;
+      default:
+        test = true;
+        break;
+    }
+
+    return test;
+  }
+</script>

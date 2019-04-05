@@ -1,0 +1,24 @@
+<script type="text/x-red" data-template-name="zwave-inclusion-node">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="ttb-zwave2/zwave:zwave-in.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]ttb-zwave2/zwave:zwave-in.name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('zwave-inclusion-node', {
+    category: 'Things',
+    color: "#ffffff",
+    defaults: {
+      name: {value: ""}
+    },
+    inputs: 1,
+    outputs: 0,
+    align: 'right',
+    icon: 'zwave.png',
+    paletteLabel: "ZWave Include",
+    label: function () {
+      return this.name || "Z-Wave Inclusion";
+    }
+  });
+</script>

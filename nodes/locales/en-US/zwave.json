@@ -1,0 +1,43 @@
+{
+    "zwave": {
+        "broker": "Broker",
+        "topic": {
+            "label": "Topic",
+            "placeholder": "zwave/"
+        },
+        "name": "Name",
+        "push": "Push",
+        "scancomplete": "ZWave : Scan Complete",
+        "inclusion": "ZWave : Inclusion mode activated"
+    },
+    "zwave-in": {
+        "nodeid": "NodeID",
+        "name": "Name",
+        "advanced": {
+            "title": "Advanced",
+            "broker": "Broker"
+        }
+    },
+    "zwave-out": {
+        "name": "Name",
+        "method": {
+            "label": "Method",
+            "setlevel": "setLevel",
+            "switchon": "switchON",
+            "switchoff": "switchOFF",
+            "setvalue": "setValue"
+        },
+        "nodeid": "NodeID",
+        "level": "Level",
+        "class": "Class",
+        "index": "Index",
+        "value": "Value"
+    },
+    "zwave-generic": {
+        "name": "Name",
+        "device": "Device",
+        "commandclass": "Class",
+        "indexclass": "Function",
+        "notready": "Your ZWave network is not ready, try again later!"
+    }
+}
