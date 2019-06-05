@@ -49,7 +49,7 @@ module.exports = function(RED) {
     res.json(zwave.zNodes.slice())
   });
 
-  RED.httpAdmin.get("/zwave/classToHode", function(req, res) {
+  RED.httpAdmin.get("/zwave/classToHide", function(req, res) {
     res.json(zwave.getComclassToHide())
   });
 
