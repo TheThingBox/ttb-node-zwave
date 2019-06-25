@@ -1,6 +1,6 @@
 {
   "name": "ttb-node-zwave",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A set of Node-RED nodes for ZWave support on the Thingbox (http://TheThingbox.io) and TimeSquAir (http://TimeSquAir.io)",
   "node-red": {
     "nodes": {
