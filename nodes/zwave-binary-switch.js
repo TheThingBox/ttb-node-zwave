@@ -15,11 +15,12 @@ module.exports = function (RED) {
     this.classindexname = config.classindexname
     this.brokerConn = RED.nodes.getNode(config.broker);
 
+    var node = this
+
     var zwaveTopic = zwave.zTopic;
-    var topic = `${zwaveTopic}/${node.nodeid}/${node.commandclass}/${node.classindex}`
+    var topic = `${zwaveTopic}/${this.nodeid}/${this.commandclass}/${this.classindex}`
     var topicIn = `${zwaveTopic}/${node.nodeid}/in`
 
-    var node = this
 
     if (this.brokerConn === undefined || this.brokerConn === null) {
       this.error(RED._("node-red:mqtt.errors.missing-config"));

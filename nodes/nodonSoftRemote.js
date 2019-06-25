@@ -12,18 +12,19 @@ module.exports = function (RED) {
     this.mark = config.mark
     this.brokerConn = RED.nodes.getNode(config.broker);
 
-    var zwaveTopic = zwave.zTopic;
-    this.topic = `${zwaveTopic}/${node.nodeid}/${node.commandclass}/${node.classindex}`
-
     var node = this
 
+    var zwaveTopic = zwave.zTopic;
+    var topic = `${zwaveTopic}/${this.nodeid}/scene`
+
+
     if(this.brokerConn === undefined || this.brokerConn === null) {
-      node.error(RED._("node-red:mqtt.errors.missing-config"));
+      this.error(RED._("node-red:mqtt.errors.missing-config"));
       return;
     }
 
     this.brokerConn.register(node);
-    this.brokerConn.subscribe(topicpub, 2, function(topic, payload, packet) {
+    this.brokerConn.subscribe(topic, 2, function(topic, payload, packet) {
       var msg = {}
       //msg.payload = zwave.getPayloadFromMqtt(payload)
       msg.payload = payload
@@ -55,7 +56,7 @@ module.exports = function (RED) {
 
     this.on('close', function (done) {
       if(node.brokerConn) {
-        node.brokerConn.unsubscribe(topicpub, node.id);
+        node.brokerConn.unsubscribe(topic, node.id);
         node.brokerConn.deregister(node, done);
       } else {
         done()

@@ -17,15 +17,15 @@ module.exports = function (RED) {
     var node = this;
 
     if(this.brokerConn === undefined || this.brokerConn === null) {
-      node.error("zwave-generic "+RED._("node-red:mqtt.errors.missing-config"));
+      this.error("zwave-generic "+RED._("node-red:mqtt.errors.missing-config"));
       return;
     }
 
     var zwaveTopic = zwave.zTopic;
-    var topicpub = `${zwaveTopic}/${node.nodeid}/${node.commandclass}/${node.classindex}`;
+    var topic = `${zwaveTopic}/${this.nodeid}/${this.commandclass}/${this.classindex}`;
 
     this.brokerConn.register(node);
-    this.brokerConn.subscribe(topicpub, 2, function(topic, payload, packet){
+    this.brokerConn.subscribe(topic, 2, function(topic, payload, packet){
       var msg = {}
       msg.payload = zwave.getPayloadFromMqtt(payload)
 
@@ -49,7 +49,7 @@ module.exports = function (RED) {
 
     this.on('close', function(done) {
       if(node.brokerConn) {
-        node.brokerConn.unsubscribe(topicpub, node.id);
+        node.brokerConn.unsubscribe(topic, node.id);
         node.brokerConn.deregister(node, done);
       } else {
         done()
