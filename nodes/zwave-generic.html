@@ -53,7 +53,7 @@
       return this.mark || "zwave.png";
     },
     label: function () {
-      return "[" + this.nodeid + "] " + (this.name || this.productname) + " - " + this.classindexname;
+      return "[" + this.nodeid + "] " + (this.name || this.productname) + ( this.classindexname ? " - " + this.classindexname : "");
     },
     oneditprepare: function () {
       var that = this;
