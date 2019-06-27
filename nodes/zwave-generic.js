@@ -50,6 +50,10 @@ module.exports = function (RED) {
       msg.intensity = msg.payload;
     }
 
+    msg.topic = node.nodeid;
+    msg.commandclass = node.commandclass;
+    msg.classindexname = node.classindexname;
+
     if(msg.payload === true) {
       msg.payload = 1;
       msg.intent = 1;
