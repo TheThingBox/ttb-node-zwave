@@ -102,7 +102,7 @@ module.exports = function (RED) {
             zwave.setValue(node.nodeid, 37, 1, 0, true);
           }
         }
-      } else if(zwave.zNodes[node.nodeid].classes[38] !== undefined) {
+      } else if(zwave.zNodes[node.nodeid] && zwave.zNodes[node.nodeid].ready && zwave.zNodes[node.nodeid].classes[38] !== undefined) {
         if(msg.intent === 0) {
           zwave.setValue(node.nodeid, 38, 1, 0, false);
         } else if(msg.intent === 1){
