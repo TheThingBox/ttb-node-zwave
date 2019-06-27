@@ -1,7 +1,7 @@
 'use strict';
 
-const ZWAVE = require('ttb-lib-zwave')
-const zwave = new ZWAVE()
+const ZWAVE = require('ttb-lib-zwave');
+const zwave = new ZWAVE();
 
 module.exports = function(RED) {
   function zwaveInclusionNode(config) {
