@@ -29,6 +29,34 @@ module.exports = function(RED) {
         this.status({ fill:"red", shape:"ring", text:"node-red:common.status.disconnected" });
       })
 
+      zwave.on('node added', function (nodeid) {
+        var mess = "Node " + nodeid + " is added";
+        var msg = {
+          payload: mess,
+          message: mess,
+          ready: false,
+          topic: nodeid
+        };
+        node.send(msg);
+      })
+
+      zwave.on('node ready', function (nodeid, nodeinfo) {
+        var device = nodeinfo.type + " (" + nodeinfo.product + ")";
+        var mess = "Node " + nodeid + " - " + device + " is ready";
+        var msg = {
+          payload: mess,
+          message: mess,
+          device: device,
+          ready: true,
+          topic: nodeid
+        };
+        node.send(msg);
+      });
+
+      zwave.on('value added', function (nodeid, comclass, value) {
+        //node.send({payload:"value added!" + comclass + " / " + value});
+      });
+
       this.on('close', function(done) {
         zwave.removeAllListeners()
         if(node.brokerConn){
