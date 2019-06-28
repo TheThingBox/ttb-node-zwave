@@ -1,6 +1,6 @@
 {
   "name": "ttb-node-zwave",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "description": "A set of Node-RED nodes for ZWave support on the Thingbox (http://TheThingbox.io) and TimeSquAir (http://TimeSquAir.io)",
   "node-red": {
     "nodes": {
@@ -14,7 +14,7 @@
   },
   "installation-duration": 420,
   "dependencies": {
-    "ttb-lib-zwave": "TheThingBox/ttb-lib-zwave#370a2698"
+    "ttb-lib-zwave": "TheThingBox/ttb-lib-zwave#19d6698"
   },
   "keywords": [
     "thingbox",
