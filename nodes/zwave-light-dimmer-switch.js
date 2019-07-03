@@ -97,9 +97,7 @@ module.exports = function (RED) {
               nextValue = 0;
             }
           }
-          if(nextValue !== currentValue){
-            setIntensity(node.nodeid, nextValue);
-          }
+          setIntensity(node.nodeid, nextValue);
         } else if(msg.hasOwnProperty('intensity')){
           msg.intensity = ensureIsNumber(msg.intensity);
           if(msg.intensity !== null){
