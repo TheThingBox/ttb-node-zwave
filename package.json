@@ -14,7 +14,7 @@
   },
   "installation-duration": 420,
   "dependencies": {
-    "ttb-lib-zwave": "TheThingBox/ttb-lib-zwave#7892f62"
+    "ttb-lib-zwave": "TheThingBox/ttb-lib-zwave#0a79b13"
   },
   "keywords": [
     "thingbox",
